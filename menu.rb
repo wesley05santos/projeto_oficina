@@ -11,41 +11,22 @@ class Menu
         [3] IMPRIMIR VEICULOS OFICINA  
         [9] FECHAR PROGRAMA    
         EOF
-        self.funcao
+        self.chamar_dicionario
     end
 
-    def self.funcao
-        puts "\nDigite a função desejada: "
-        codigo_funcao = gets.chomp.to_i
-        if codigo_funcao == 1
-            $oficina.entrada_veiculo_oficina
-        elsif codigo_funcao == 2
-            $oficina.saida_veiculo_oficina
-        elsif codigo_funcao == 3
-            $oficina.listar_veiculos_oficina
-        elsif codigo_funcao == 9
-            puts "ENCERRANDO PROGRAMA....."
-            sleep(3)            
-            exit
-        else
-            funcao_invalida
-        end
+    def self.dicionario
+        {
+            1 => -> {$oficina.entrada_veiculo_oficina},
+            2 => -> {$oficina.saida_veiculo_oficina},
+            3 => -> {$oficina.listar_veiculos_oficina},
+            9 => -> {encerra_programa}      
+        }
+    end   
+
+    def self.chamar_dicionario                     
+        result = dicionario[gets.chomp.to_i]&.call    
+        result ||=  funcao_invalida
     end
-
-    # def self.dicionario
-    #     {
-    #         # 1: -> {entrada_veiculo_oficina},
-    #         # 2: -> {saida_veiculo_oficina},
-    #         # 3: -> {listar_veiculos_oficina},
-    #         {codigo: 9: funcao: teste}      
-    #     }
-    # end   
-
-    # def self.chamar_dicionario                     
-    #     result = dicionario[gets.chomp.to_sym]
-    #     binding.irb       
-    #     result ||=  funcao_invalida
-    # end
 
     def self.retorna_menu
         clear
@@ -69,5 +50,11 @@ class Menu
         EOF
         sleep(1)
         retorna_menu
+    end
+
+    def self.encerra_programa
+        puts "ENCERRANDO PROGRAMA....."
+        sleep(3)            
+        exit
     end
 end
